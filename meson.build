@@ -1,6 +1,6 @@
 project(
   'MWVCP_AntColony',
-  'cpp', default_options : ['cpp_std=c++11', 'buildtype=debug'])
+  'cpp', default_options : ['cpp_std=c++11', 'buildtype=release'])
 
 incdir = include_directories('include')
 

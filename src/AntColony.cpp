@@ -116,15 +116,15 @@ void AntColony::computeCycle()
     if (this->bestSolution.find(j) != this->bestSolution.end())
     {
       this->globalPheromone[j] = (1 - EVAPORATION_RATE) * this->globalPheromone[j] + (EVAPORATION_RATE * (1.0 / this->bestCost));
-      printf("%d %2.6f in cover\n", j, globalPheromone[j]);
+      // printf("%d %2.6f in cover\n", j, globalPheromone[j]);
     }
     else
     {
       this->globalPheromone[j] = (1 - EVAPORATION_RATE) * this->globalPheromone[j];
-      printf("%d %2.6f\n", j, globalPheromone[j]);
+      // printf("%d %2.6f\n", j, globalPheromone[j]);
     }
   }
-  printf("--End of cycle--\n");
+  // printf("--End of cycle--\n");
 }
 
 void AntColony::computeStep(Ant *k)
@@ -169,9 +169,9 @@ void AntColony::antTransition(Ant *k, int j)
 {
   this->updateConnectivityValue(k, j);
   k->actualVertex = j;
-  double prev = this->globalPheromone[j];
+  // double prev = this->globalPheromone[j];
   this->globalPheromone[j] = (1 - PHI) * this->globalPheromone[j] + PHI * this->initialPheromone;
-  printf("Ant %d T%d=%2.6f => T%d=%2.6f\n", k->id, j, prev, j, this->globalPheromone[j]);
+  // printf("Ant %d T%d=%2.6f => T%d=%2.6f\n", k->id, j, prev, j, this->globalPheromone[j]);
   if (k->edgesMissing == 0)
   {
     this->compareSolution(k->solution, k->solutionCost);
