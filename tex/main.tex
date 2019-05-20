@@ -1,0 +1,109 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{indentfirst}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{svg}
+\SetKwComment{Comment}{$\triangleright$\ }{}
+
+\title{Algoritmo de Colonia de Hormigas para el problema de Cobertura de Vértices de Peso Mínima}
+\author{Juan C. Castrejón}
+\date{Mayo 2019}
+
+\begin{document}
+
+\maketitle
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\abstractname}{Resumen}
+\renewcommand{\algorithmcfname}{Procedimiento}
+\renewcommand{\refname}{Referencias}
+\renewcommand{\figurename}{Figura}
+
+\begin{abstract}
+Las recientes meta-heurísticas inspiradas por fenómenos de la naturaleza, han mostrado un buen desempeño, a menudo superando los métodos clásicos.
+\par
+En esta ocasión se usará el algoritmo de colonia de hormigas, donde las hormigas deambulan aleatoriamente mientras dejan caminos de feromonas a su paso, lo cual atrae a otras hormigas, reforzando así, las mejores rutas a su objetivo.
+\par
+Este documento explica una adaptación del algoritmo de colonia de hormigas aplicado al problema de cobertura de vértices de peso mínima.
+\end{abstract}
+
+
+\section{Introducción al problema}
+Dada una gráfica no dirigida $G=(V, E)$, la cobertura de vértices $V'$ (fig. \ref{fig:1}) es un subconjunto de $V$, tal que para toda arista:
+\begin{equation}
+(u,v) \in E \Rightarrow u \in V' \lor v \in V'
+\end{equation}
+En otras palabras, que toda arista de la gráfica tiene al menos un vértice en la cobertura $V'$.
+\par
+Una cobertura de vértices de peso mínima (fig. \ref{fig:2}) de una gráfica no dirigida, con peso en los vértices $G=(V, E)$ es una cobertura de vértices $V'$ tal que la suma de pesos de los vértices de $V'$ es mínima.
+
+\begin{figure}[H]
+  \centering
+  \includesvg[width=150pt]{1.svg}
+  \caption{Cobertura de vértices}
+  \label{fig:1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includesvg[width=150pt]{2.svg}
+  \caption{Cobertura de vértices de peso mínima}
+  \label{fig:2}
+\end{figure}
+
+La cobertura de vértices de peso mínima (el acrónimo MWVC, por sus siglas en inglés, será usado a partir de ahora), puede ser usada para modelar muchas situaciones del mundo real en las areas de telecomunicaciones, diseño de circuitos, etc. MWVC es un problema NP-duro de optimización, por lo que no se conoce una solución en tiempo polinomial.
+\par
+En este documento se usará una meta-heurística como una alternativa viable para encontrar soluciones \textit{suficientemente buenas} en tiempo razonable, dada una instancia de MWVC.
+
+\section{Optimización por Colonia de Hormigas}
+En la naturaleza, algunas especies de hormigas, deambulan aleatoriamente y cuando encuentran comida, regresan a su colonia, dejando caminos de féromonas en su paso. Si otras hormigas encuentran estos caminos, es probable que dejen de moverse aleatoriamente y sigan el camino, reforzando las feromonas si encuentran comida eventualmente.
+\par
+Sin embargo, los caminos de feromonas se evaporan con el tiempo, reduciendo así la atractividad para otras hormigas. Mientras más tiempo le tome a una hormiga recorrer un camino, más se evaporan las féromonas. Un camino corto, es atravesado más frecuentemente, lo que refuerza su atractividad, provocando que otras hormigas lo prefieran sobre otros caminos más largos.
+\par
+La optimización por colonia de hormigas, a la cual se referirá ahora como ACO (Ant Colony Optimization) por sus siglas en inglés, es un algoritmo miembro de los métodos de inteligencia de enjambre, en el cual de manera probabilística, se desea encontrar caminos óptimos en una gráfica, usando el comportamiento natural basado en féromonas usado por las hormigas cuando buscan un camino desde una fuente de comida, hasta su colonia.
+\par
+Cuando se usa ACO, el problema se transforma en una gráfica con pesos, después se distribuye un conjunto de hormigas en la gráfica para encontrar caminos que correspondan a soluciones potencialmente \textit{buenas}.
+\par
+La idea general del algoritmo se describe a continuación:
+
+\bigskip
+\LinesNumbered
+\begin{algorithm}[H]
+Posicionar cada hormiga en un nodo inicial arbitrario.\\
+Cada hormiga avanza a un nodo siguiente usando una regla de transición.\\
+Aplicar la regla de actualización local de feromonas.\\
+Repetir pasos 2-4 hasta que todas las hormigas completen una solución.\\
+Aplicar la regla de actualización global de feromonas.\\
+Repetir pasos 1-5 hasta que se cumpla la condición de terminación.\\
+\caption{ACO}
+\label{proc:1}
+\end{algorithm}
+\LinesNotNumbered
+\bigskip
+
+\subsection{Actualización de feromonas}
+
+\subsubsection{Regla local}
+
+\subsubsection{Regla global}
+
+\subsection{Regla de transición}
+
+\section{Función de costo}
+
+\section{Representación de la gráfica}
+
+\section{Resultados}
+
+
+
+\begin{thebibliography}{2}
+\bibitem{1}
+M. Dorigo (1992). ``Optimization, Learning and Natural Algorithm'', \textit{PhD thesis}, Politecnico di Milano, Italy.
+\bibitem{2}
+Shyu, S.J., P.Y. Yin, B.M.T. Lin (2004). ``An Ant Colony Optimization Algorithm for the Minimum Weight Vertex Cover Proble'', \textit{Annals of Operations Research}, 131, 283–304.
+\end{thebibliography}
+\end{document}
