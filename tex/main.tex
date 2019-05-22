@@ -1,7 +1,7 @@
 \documentclass[12pt, letterpaper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb}
-\usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{indentfirst}
@@ -33,9 +33,11 @@ Este documento explica una adaptación del algoritmo de colonia de hormigas apli
 
 \section{Introducción al problema}
 Dada una gráfica no dirigida $G=(V, E)$, la cobertura de vértices $V'$ (fig. \ref{fig:1}) es un subconjunto de $V$, tal que para toda arista:
+
 \begin{equation}
-(u,v) \in E \Rightarrow u \in V' \lor v \in V'
+    (u,v) \in E \Rightarrow u \in V' \lor v \in V'
 \end{equation}
+
 En otras palabras, que toda arista de la gráfica tiene al menos un vértice en la cobertura $V'$.
 \par
 Una cobertura de vértices de peso mínima (fig. \ref{fig:2}) de una gráfica no dirigida, con peso en los vértices $G=(V, E)$ es una cobertura de vértices $V'$ tal que la suma de pesos de los vértices de $V'$ es mínima.
@@ -84,26 +86,73 @@ Repetir pasos 1-5 hasta que se cumpla la condición de terminación.\\
 \LinesNotNumbered
 \bigskip
 
-\subsection{Actualización de feromonas}
-
-\subsubsection{Regla local}
-
-\subsubsection{Regla global}
+\subsection{Representación de la gráfica}
+Sea $G=(V,E)$ con peso en los vértices, la gráfica que denota una instancia de MWVC; para garantizar que siempre exista un camino que cruce todos los vérticed de V, se construirá una gráfica completa $G_c=(V, E_c)$. La gráfica completa servirá para poder garantizar que una hormiga puede visitar cualquier vértice a partir de cualquier otro vértice. En la gráfica completa, las aristas tendrán peso 0 o 1, indicando si la arista ya ha sido cubierta por algún vértice; al crear la gráfica completa, el peso de las aristas que no pertenzcan a $E$, será 0; y 1 en el caso contrario.
 
 \subsection{Regla de transición}
+La regla de transición es una relación aleatoria que asigna la probabilidad de que un hormiga $k$ que se encuentra actualmente en un vértice $i$, escoja el vértice $j$ como su siguiente vértice para visitar. La siguiente ecuación muestra cómo se calcula ésta probablidad:
+
+\begin{equation}
+p^k_{j} = \begin{dcases}
+    1, & \text{si } q < q_0 \text{ y } j = max(\tau_{r}\eta_{rk}) \text{ con } r \in A_k;\\
+    0, & \text{si } q < q_0 \text{ y } j \neq max(\tau_{r}\eta_{rk}) \text{ con } r \in A_k;\\
+    \frac{\tau_{j}\eta_{rk}}{\sum_{r \in A_k} \tau_{j}\eta_{rk}} & \text{si } q \geq q_0;
+    \end{dcases}
+\end{equation}
+
+\noindent
+donde $A_k$ es el conjunto de vértices accesibles para la hormiga $k$, $\tau_{j}$ es el valor de feromona actual en el vértice $j$ y $\eta_{rk}$ representa el número de aristas no cubiertas por la hormiga $k$ que están conectadas al vértice $j$, dividido entre el peso del vértice $j$; básicamente es una heurística local para favorecer al vértice que cubra la mayor cantidad de aristas y que tenga menor peso.
+
+\subsection{Actualización local de feromonas}
+Cada vez que una hormiga selecciona un vértice $i$ como su siguiente vértice, se realiza la actualización local de feromonas, la cual ajusta la feromona actual de un vértice disminuyendo la deseabilidad frente a otras hormigas, con el fin de dirigir la exploración de las demás hormigas a otros vértices que aún no hayan sido visitados.
+La feromona en el vértice $i$ se actualiza localmente usando la siguiente regla:
+
+\begin{equation}
+    \tau_i=(1-\varphi)\tau_i + \varphi\tau_0
+\end{equation}
+
+\noindent
+donde $\varphi$ es un parametro que indica el \textit{grado de evaporación} de las feromonas, esto es, que tan rápido decrecen las fermonas de un vértice con cada actualización.
+
+\subsection{Actualización global de feromonas}
+Después de que todas las hormigas hayan completado una solución (ya no quedan aristas por cubrir), se ejecuta la actualización global de feromonas, la cual aumenta la intensidad de las feromonas en los vértices que pertenecen a la mejor solución conocida actualmente y reduce el resto, con el fin de que en la siguiente iteración del algoritmo se favorezca a los vértices que pertenecen a la siguiente solución y por consecuente, se generen soluciones similares a ésta y se olviden las malas soluciones generadas en iteraciones anteriores. Sea $V'_c \subseteq V$ la mejor solución actualmente conocida; la actualización global de feromonas se realiza para cada vértice en la gráfica, usando la siguiente regla:
+
+\begin{equation}
+    \tau_i = \begin{dcases}
+        (1-\varphi)\tau_i+\varphi\Delta\tau_i, & \text{si } i \in V'_c;\\
+        (1-\varphi)\tau_i, & \text{en otro caso};
+    \end{dcases}
+\end{equation}
+
+\noindent
+donde
+
+\begin{equation}
+    \Delta\tau_i = \frac{1}{\sum_{j \in V'_c}{w(j)}}
+\end{equation}
+
+\noindent
+y $w(v)$ es la función que regresa el peso del vértice $v$.
 
 \section{Función de costo}
+Dada un conjunto solución $V' \subseteq V$ la función de costo que permite medir la utilidad de $V'$ se usa como sigue:
 
-\section{Representación de la gráfica}
+\begin{equation}
+    f(V') = \sum_{v \in V'}w(v)
+\end{equation}
+
+\noindent
+como se puede observar, la función de costo sólo toma en cuenta la suma de los pesos de los vértices en la solución actual, ya que la heurística local en la regla de transición ya favorece la obtención de soluciones con menos elementos.
+\par
+Sean $V'_1, V'_2 \subseteq V$ dos cubiertas de la gráfica, decimos que $V'_1$ es mejor solución que $V'_2$ si $f(V'_1) < f(V'_2)$.
 
 \section{Resultados}
-
 
 
 \begin{thebibliography}{2}
 \bibitem{1}
 M. Dorigo (1992). ``Optimization, Learning and Natural Algorithm'', \textit{PhD thesis}, Politecnico di Milano, Italy.
 \bibitem{2}
-Shyu, S.J., P.Y. Yin, B.M.T. Lin (2004). ``An Ant Colony Optimization Algorithm for the Minimum Weight Vertex Cover Proble'', \textit{Annals of Operations Research}, 131, 283–304.
+Shyu, S.J., P.Y. Yin, B.M.T. Lin (2004). ``An Ant Colony Optimization Algorithm for the Minimum Weight Vertex Cover Problem'', \textit{Annals of Operations Research}, 131, 283–304.
 \end{thebibliography}
 \end{document}
