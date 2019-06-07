@@ -147,7 +147,38 @@ como se puede observar, la función de costo sólo toma en cuenta la suma de los
 Sean $V'_1, V'_2 \subseteq V$ dos cubiertas de la gráfica, decimos que $V'_1$ es mejor solución que $V'_2$ si $f(V'_1) < f(V'_2)$.
 
 \section{Resultados}
+A continuación se muestran los resultados obtenidos para una gráfica con $|V|=15$ y $|E|=24$, con pesos iguales en todos los vértices, construida de tal forma que el algoritmo \textit{greedy}, descrito en el procedimiento \ref{proc:greedy}, no obtiene la solución óptima para el problema.
+\par
+En la figura 3 y 4 se puede observar que ACO fue capaz de mejorar efectivamente la solución obtenida por el algoritmo \textit{greedy}. ACO muestra un desempeño similar en gráficas mucho más grandes, donde el espacio de búsqueda mayor, también favorece la obtención de más soluciones distintas a la del algoritmo \textit{greedy}.
+\par
+Los parámetros usados en ACO se establecieron como: $k = 10$, $q_0=0.9$,    $\varphi=0.9$, $INTENTOS=150$, $\tau_0 = |V|(|V|-a)/C$, donde $k$ es el número de hormigas, $C$ es el costo total de una soluciñon incial aproximaday $a$ es el número de vértices de la solución inicial.
 
+\bigskip
+\LinesNumbered
+\begin{algorithm}[H]
+Para cada vértice, tomar el vértice $v$ con mayor proporción de aristas sin cubrir/peso del vértice.\\
+Para cada arista de $v$ indicar que esa arista ya está cubierta en la solución.\\
+Agregar $v$ a la solución.\\
+Repetir los pasos 1-4 hasta que no queden aristas por cubrir en la gráfica.\\
+\caption{Algoritmo greedy}
+\label{proc:greedy}
+\end{algorithm}
+\LinesNotNumbered
+\bigskip
+
+\begin{figure}[H]
+  \centering
+  \includesvg[width=230pt]{greedy.svg}
+  \caption{Solución obtenida por el algoritmo greedy.}
+  \label{fig:3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includesvg[width=230pt]{aco.svg}
+  \caption{Solución obtenida por ACO.}
+  \label{fig:4}
+\end{figure}
 
 \begin{thebibliography}{2}
 \bibitem{1}
