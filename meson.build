@@ -1,6 +1,6 @@
 project(
   'MWVCP_AntColony',
-  'cpp', default_options : ['cpp_std=c++11', 'buildtype=release'])
+  'cpp', default_options : ['cpp_std=c++11', 'buildtype=release', 'warning_level=3'])
 
 incdir = include_directories('include')
 
@@ -10,6 +10,3 @@ executable(
   'MWVCP_AntColony',
   src,
   include_directories : incdir)
-
-#e = executable('prog', 'test/testprog.cpp')
-#test('all', e)

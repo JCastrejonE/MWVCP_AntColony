@@ -159,7 +159,7 @@ void AntColony::computeStep(Ant *k)
         vertexProb[i] = j;
       }
     }
-    uniform_int_distribution<double> dice(0, vertexProb.size() - 1);
+    uniform_int_distribution<int> dice(0, vertexProb.size() - 1);
     int result = vertexProb[dice(this->dre)];
     this->antTransition(k, result);
   }
