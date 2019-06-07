@@ -11,9 +11,9 @@ using namespace std;
 
 #define ANTS 10
 #define RELATIVE_SIGNIFICANCE 1
-#define THRESHOLD 0.5
-#define EVAPORATION_RATE 0.2
-#define PHI 0.12
+#define THRESHOLD 0.9
+#define EVAPORATION_RATE 0.9
+#define PHI 0.9
 #define MAX_IMPROVE_ATTEMPTS 150
 
 class AntColony

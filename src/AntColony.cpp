@@ -26,7 +26,7 @@ AntColony::~AntColony()
   {
     delete x;
   }
-  printf("Ants destroyed.\n");
+  // printf("Ants destroyed.\n");
 }
 
 pair<unordered_set<int>, int> AntColony::computeSolution()
@@ -36,7 +36,7 @@ pair<unordered_set<int>, int> AntColony::computeSolution()
   int C = this->bestCost;
   int a = this->bestSolution.size();
   this->initialPheromone = (double)this->n * (this->n - a) / C;
-  printf("T0: %.6f\n", this->initialPheromone);
+  // printf("T0: %.6f\n", this->initialPheromone);
   uniform_int_distribution<int> randomVertex(0, this->n - 1);
   for (int j = 0; j < this->n; j++)
   {
